@@ -9,7 +9,7 @@ import PlaylistEntity from "../entities/playlist.entity";
 
 class PlaylistController {
   private prefix: string = "/playlists";
-  private sufix: string = "/search";
+  private search: string = "/search";
   public router: Router;
   private playlistService: PlaylistService;
 
@@ -21,7 +21,7 @@ class PlaylistController {
 
   private initRoutes() {
     this.router.get(
-      `${this.prefix}${this.sufix}`,
+      `${this.prefix}${this.search}`,
       (req: Request, res: Response) => this.searchPlaylists(req, res)
     );
 
