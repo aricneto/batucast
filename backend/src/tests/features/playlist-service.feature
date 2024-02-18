@@ -1,90 +1,39 @@
 Feature: Playlist Service
-   
-    Scenario: Create a New Playlist
-        Given a user with id "123" is logged-in
-        When a "POST" request is sent to "/api/playlists" with the playlist name "Afternoon Sessions" and user id "123"
-        Then the response status should be "201"
-        And the response JSON should contain the created playlist with name "Afternoon Sessions"
 
-    Scenario: Add a Song to an Existing Playlist
-        Given the PlaylistService returns a logged-in user with name "Tavio" and password "Password678"
-        And there is a playlist with the name "Breakfast"
-        And there is a song with the title "Construção"
-        When a "POST" request is sent to "/playlists/Breakfast/add-song" with the data:
-        """
-        {
-            "song": {
-                "title": "Construção",
-                "artist": "Chico Buarque"
-            }
-        }
-        """
-        Then the response status should be "200"
-        And the playlist "Breakfast" should contain the song "Construção"
+    # Service
+    Scenario: Get playlists by user id
+        Given the method getPlaylists was called with the user_id "1" from PlaylistService returns playlists with ids "1", "2", and "3"
+        When the method getPlaylists from PlaylistService is called with the id "1"
+        Then the playlists returned must have ids "1", "2", and "3"
 
-    Scenario: Delete an Existing Playlist
-        Given the PlaylistService returns a logged-in user with name "BigT" and password "Password456"
-        And there is a playlist with the name "Breakfast"
-        When a "DELETE" request is sent to "/playlists/Breakfast"
-        Then the response status should be "204"
-        And the playlist "Breakfast" should no longer exist
+    Scenario: Create a new playlist
+        Given the function createPlaylist was called with the user_id "1" and the playlist name "My New Playlist"
+        When the function getUserPlaylists is called with the user_id "1"
+        Then the playlists returned must include "My New Playlist"
 
-    Scenario: View All Available Playlists
-        Given the PlaylistService returns a list of playlists
-        When a "GET" request is sent to "/playlists"
-        Then the response status should be "200"
-        And the response JSON should be a list of playlists
-        And the playlist "Morning Vibes" should be in the list
-        And the playlist "Chill Vibes" should be in the list
+    Scenario: Update playlist name
+        Given a user with id "1" has a playlist named "Old Playlist"
+        When the function updatePlaylist is called with the playlist id "1", user_id "1", and the updated playlist name "New Playlist"
+        And the function getPlaylist is called with the playlist id "1"
+        Then the playlist returned must have the name "New Playlist"
 
-    Scenario: Edit Playlist Name
-        Given the PlaylistService returns a logged-in user with name "Alice" and password "Password789"
-        And there is a playlist with the name "Old Playlist"
-        When a "PUT" request is sent to "/playlists/Old Playlist" with the data:
-        """
-        {
-            "newName": "New Playlist Name"
-        }
-        """
-        Then the response status should be "200"
-        And the playlist "New Playlist Name" should exist
-        And the playlist "Old Playlist" should no longer exist
+    Scenario: Delete a playlist
+        Given a user with id "1" has playlists with ids "1", "2", and "3"
+        When the function deletePlaylist is called with the playlist id "1" and user_id "1"
+        And the function getPlaylists is called with the user_id "1"
+        Then the playlists returned must not include the playlist with id "1"
+        And the user playlists must have 2 items
 
-    Scenario: Delete Song from Playlist
-        Given the PlaylistService returns a logged-in user with name "John" and password "Password987"
-        And there is a playlist with the name "My Playlist"
-        And there is a song with the title "Deleted Song"
-        When a "DELETE" request is sent to "/playlists/My Playlist/remove-song/Deleted Song"
-        Then the response status should be "200"
-        And the playlist "My Playlist" should not contain the song "Deleted Song"
+    Scenario: Add a song to a playlist
+        Given a user with id "1" has a playlist with id "1"
+        And there is a song with id "4"
+        When the function addSongToPlaylist is called with the playlist id "1", song id "4", and user_id "1"
+        And the function getPlaylist is called with the playlist id "1"
+        Then the playlist returned must have the song with id "4"
 
-    Scenario: View All Songs in a Playlist
-        Given the PlaylistService returns a logged-in user with name "Eva" and password "Password654"
-        And there is a playlist with the name "Favorite Songs"
-        And there are songs in the playlist
-        When a "GET" request is sent to "/playlists/Favorite Songs/songs"
-        Then the response status should be "200"
-        And the response JSON should be a list of songs in the playlist
-
-    Scenario: Create Playlist with Existing Name
-        Given the PlaylistService returns a logged-in user with name "Bob" and password "Password321"
-        And there is a playlist with the name "Existing Playlist"
-        When a "POST" request is sent to "/playlists" with the data:
-        """
-        {
-            "name": "Existing Playlist",
-            "user": {
-                "name": "Bob",
-                "password": "Password321"
-            }
-        }
-        """
-        Then the response status should be "400"
-        And the response JSON should contain an error message indicating the name is already in use
-
-    Scenario: Delete Nonexistent Playlist
-        Given the PlaylistService returns a logged-in user with name "Charlie" and password "Password123"
-        And there is no playlist with the name "Nonexistent Playlist"
-        When a "DELETE" request is sent to "/playlists/Nonexistent Playlist"
-        Then the response status should be "404"
-        And the response JSON should contain an error message indicating the playlist does not exist
+    Scenario: Remove a song from a playlist
+        Given a user with id "1" has a playlist with id "1" containing songs with ids "4", "5", and "6"
+        When the function removeSongToPlaylist is called with the playlist id "1", song id "5", and user_id "1"
+        And the function getPlaylist is called with the playlist id "1"
+        Then the playlist returned must not have the song with id "5"
+        And the playlist must have songs with ids "4" and "6"

@@ -25,6 +25,11 @@ class PlaylistController {
       (req: Request, res: Response) => this.searchPlaylists(req, res)
     );
 
+    this.router.get(
+      `${this.prefix}/MyPlaylists`,
+      (req: Request, res: Response) => this.getUserPlaylists(req, res)
+    );
+
     this.router.get(this.prefix, (req: Request, res: Response) =>
       this.getPlaylists(req, res)
     );
@@ -71,6 +76,16 @@ class PlaylistController {
 
   private async getPlaylists(req: Request, res: Response) {
     const playlists = await this.playlistService.getPlaylists();
+
+    return new SuccessResult({
+      msg: Result.transformRequestOnMsg(req),
+      data: playlists,
+    }).handle(res);
+  }
+
+  private async getUserPlaylists(req: Request, res: Response) {
+    const userId = req.body.userId;
+    const playlists = await this.playlistService.getUserPlaylists(userId);
 
     return new SuccessResult({
       msg: Result.transformRequestOnMsg(req),

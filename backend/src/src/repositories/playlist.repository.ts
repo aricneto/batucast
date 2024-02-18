@@ -10,6 +10,10 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
     return await this.findAll();
   }
 
+  public async getUserPlaylists(userId: string): Promise<PlaylistEntity[]> {
+    return await this.findAll((item) => item.createdBy === userId);
+  }
+
   public async getPlaylist(id: string): Promise<PlaylistEntity | null> {
     return await this.findOne((item) => item.id === id);
   }

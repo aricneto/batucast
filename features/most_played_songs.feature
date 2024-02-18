@@ -1,26 +1,7 @@
 Feature: Most Played Songs
     As an user
     I want see my most played songs of the month
-    So that I can create new playlists and get to know my taste in music
-
-    Scenario: User requests a new playlist of the most played songs of the month
-        Given I'm logged in with user "pedro", password "123"
-        And I have the songs "Aquarela", "Lenha", and "Yellow Submarine" in my most played songs
-        When I request a new playlist of my most played songs
-        Then the system generates a playlist titled "Top Hits"
-        And includes "Aquarela", "Lenha", and "Yellow Submarine" in the playlist
-        And allows me to save it for future listening
-
-    Scenario: User requests a new playlist based on most played genre
-        Given I'm logged in as an user
-        And I have songs from the genres "Rock", "Pop", and "Jazz" in my most played list
-        And I have played songs from the "Rock" genre "10" times
-        And I have played songs from the "Pop" genre "4" times
-        And I have played songs from the "Jazz" genre "2" times
-        When I request a new playlist based on the most played genre
-        Then the system identifies "Rock" as the predominant genre among my most played songs
-        And generates a playlist titled "Top Rock Hits"
-        And allows me to save it for future listening
+    So that I can get to know my taste in music
 
     Scenario: New user who has never played a song before
         Given I've created a new account with user "pedro", password "123"

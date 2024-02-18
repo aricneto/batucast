@@ -199,7 +199,7 @@ defineFeature(feature, (test) => {
       async (route, docString) => {
         const body = JSON.parse(docString);
         response = await request.post(`${prefix}${route}`).send(body);
-        console.debug(response.body);
+        //console.debug(response.body);
       }
     );
 
