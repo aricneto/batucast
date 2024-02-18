@@ -32,3 +32,8 @@ Scenario: Unsuccessful login
     When a GET request was sent to "/api/users/login" with the request body being a JSON with email "ze@gmail.com" and password "ze123"
     Then the response status should be "200"
     And the user with email "ze@gmail" is logged in
+
+Scenario: User Page - getUser function
+    Given the system has a user with id "1", name "otaviohbf", email "ohbf@cin.ufpe.br" and history_tracking set to "true"
+    When the function getUser is called for id "1"
+    Then the user returned must have id "1", name "otaviohbf", email "ohbf@cin.ufpe.br" and history_tracking set to "true"

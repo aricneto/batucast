@@ -1,4 +1,5 @@
 Feature: Homepage
+//as reference
 
 Scenario: User Page - getUser function
     Given the system has a user with id "1", name "otaviohbf", email "ohbf@cin.ufpe.br" and history_tracking set to "true"
