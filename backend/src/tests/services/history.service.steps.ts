@@ -12,6 +12,7 @@ import UserRepository from "../../src/repositories/user.repository";
 import UserService from "../../src/services/user.service";
 import UserEntity from "../../src/entities/user.entity";
 import SongEntity from "../../src/entities/song.entity";
+import SongModel from "../../src/models/song.model";
 import UserModel from "../../src/models/user.model";
 import StatisticsModel from "../../src/models/statistics.model";
 import Injector from "../../src/di/injector";
@@ -40,6 +41,7 @@ defineFeature(feature, (test) => {
   let mockSongEntity: SongEntity;
 
   let mockUserModel: UserModel;
+  let mockSongModel: SongModel;
   let injector: Injector = di;
 
   beforeEach(() => {
@@ -348,6 +350,135 @@ defineFeature(feature, (test) => {
         expect(most_played_songs[i].song_id).toBe(table[i].song_id);
         expect(most_played_songs[i].times_played).toBe(parseInt(table[i].times_played));
       }
+    });
+  });
+
+  test("Personalized Recommendations", ({ given, and, when, then }) => {
+    let recommendation: SongModel[];
+
+    given(
+      /^the system has a user with id "(.*)", name "(.*)", email "(.*)" history_tracking set to "(.*)"$/,
+      async (userId, userName, userEmail, historyTracking) => {
+        // Mock implementation of the UserRepository method to simulate user existence
+        mockUserModel = new UserModel({
+          id: userId,
+          name: userName,
+          email: userEmail,
+          history_tracking: historyTracking === "true" ? true : false,
+          // Add any other necessary attributes
+        });
+        // Mock call to getUser from UserService
+        jest.spyOn(userService, "getUser").mockResolvedValue(mockUserModel);
+      }
+    );
+
+    and(
+      /^this user has a history with a song with id "(.*)" and genre "(.*)"$/,
+      async (songId, genre) => {
+        // Mock implementation of getUserHistory from HistoryService to simulate user history
+        jest.spyOn(historyService, "getUserHistory").mockResolvedValue([
+          new HistoryModel({
+            id: "",
+            user_id: mockUserModel.id,
+            song_id: songId,
+          }),
+        ]);
+      }
+    );
+
+    and(
+      /^the most_played_genre by this user is "(.*)"$/,
+      async (mostPlayedGenre) => {
+        // Mock implementation of user statistics to simulate the most played genre
+        jest.spyOn(historyService, "getUserStatistics").mockResolvedValue({
+          most_played_genre: mostPlayedGenre,
+        });
+      }
+    );
+
+    and(
+      /^there is, in the database, one other song with id "(.*)" and genre "(.*)"$/,
+      async (otherSongId, otherGenre) => {
+        // Mock implementation of song repository to simulate the existence of another song in the database
+        jest.spyOn(mockSongRepository, "getSong").mockResolvedValue(
+          new SongEntity({
+            id: otherSongId,
+            title: 'evidencias',
+            duration:100,
+            artist:'xito e chororao',
+            genre: otherGenre,
+            times_ever_played: 100,
+            // Add any other necessary attributes
+          })
+        );
+      }
+    );
+
+    when(
+      /^the function getUserRecommendations is called for user id "(.*)"$/,
+      async (userId) => {
+        recommendation = await historyService.getUserRecommendations(userId);
+      }
+    );
+
+    then(
+      /^the recommendation to be returned must be the song with id "(.*)" and genre "(.*)"$/,
+      (expectedId, expectedGenre) => {
+        expect(recommendation).not.toBeNull();
+        expect(recommendation.length).toBeGreaterThan(0); // Check if recommendation is not empty
+        expect(recommendation[0].id).toBe(expectedId);
+        expect(recommendation[0].genre).toBe(expectedGenre);
+      }
+    );
+  });
+  
+
+
+
+
+  test('User Page - getHistory function', ({ given, and, when, then }) => {
+    let history: HistoryModel[] | null;
+
+    given(/^the system has a user with id "(.*)", name "(.*)", email "(.*)", history_tracking set to "(.*)"$/, async (userId, userName, userEmail, historyTracking) => {
+        // Mock implementation of the UserRepository method
+        mockUserEntity = new UserEntity({
+            id: userId,
+            name: userName,
+            email: userEmail,
+            password: "password", // Mock password for the user entity
+            history_tracking: historyTracking === "true" ? true : false,
+            // Add any other necessary attributes
+        });
+
+        jest.spyOn(mockUserRepository, "getUser").mockResolvedValue(mockUserEntity);
+    });
+
+    and(/^this user has a history with a song with id "(.*)"$/, async (songId) => {
+        // Mock implementation of the HistoryRepository method
+        mockHistoryEntity = new HistoryEntity({
+            id: "1", // Assuming a predefined ID for simplicity
+            user_id: mockUserEntity.id,
+            song_id: songId,
+            // Add any other necessary attributes
+        });
+
+
+        jest.spyOn(historyService, "getUserHistory").mockResolvedValue([mockHistoryEntity]); // Return an array of history entities
+    });
+
+    when(/^the function getUserHistory is called for id "(.*)"$/, async (userId) => {
+        history = await historyService.getUserHistory(userId);
+    });
+
+    then(/^the history model returned must have user_id equal to "(.*)" and song_id equal to "(.*)"$/, async (expectedUserId, expectedSongId) => {
+        const expectedHistory = new HistoryModel({
+            id: "1", // Assuming a predefined ID for simplicity
+            user_id: expectedUserId,
+            song_id: expectedSongId,
+            // Add any other necessary attributes
+        });
+
+        expect(history).toEqual([expectedHistory]); // Compare arrays of HistoryModel
     });
   });
 });

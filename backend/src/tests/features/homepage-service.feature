@@ -1,18 +1,18 @@
 Feature: Homepage
 //as reference
 
-Scenario: User Page - getUser function
+Scenario: User Page - getUser function (ok)
     Given the system has a user with id "1", name "otaviohbf", email "ohbf@cin.ufpe.br" and history_tracking set to "true"
     When the function getUser is called for id "1"
     Then the user returned must have id "1", name "otaviohbf", email "ohbf@cin.ufpe.br" and history_tracking set to "true"
 
-Scenario: User Page - getHistory function
+Scenario: User Page - getHistory function (ok)
     Given the system has a user with id "1", name "otaviohbf", email "ohbf@cin.ufpe.br" history_tracking set to "true"
     And this user has a history with a song with id "2"
     When the function getUserHistory is called for id "1"
     Then the history model returned must have user_id equal to "1" and song_id equal to "2"
 
-Scenario: Personalized Recommendations
+Scenario: Personalized Recommendations (not ok)
     Given the system has a user with id "1", name "otaviohbf", email "ohbf@cin.ufpe.br" history_tracking set to "true"
     And this user has a history with a song with id "2" and genre "MPB"
     And the most_played_genre by this user is "MPB"

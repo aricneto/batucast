@@ -55,3 +55,17 @@ Feature: History Service
             | 2       | Yellow                  | Coldplay    | Pop   | 3            |
             | 4       | Ticket to Ride          | The Beatles | Rock  | 2            |
             | 3       | Yellow Submarine        | The Beatles | Rock  | 1            |
+
+Scenario: Personalized Recommendations
+    Given the system has a user with id "1", name "otaviohbf", email "ohbf@cin.ufpe.br" history_tracking set to "true"
+    And this user has a history with a song with id "2" and genre "MPB"
+    And the most_played_genre by this user is "MPB"
+    And there is, in the database, one other song with id "1" and genre "MPB"
+    When the function getUserRecommendations is called for user id "1"
+    Then the recommendation to be returned must be the song with id "1" and genre "MPB"
+
+Scenario: User Page - getHistory function
+    Given the system has a user with id "1", name "otaviohbf", email "ohbf@cin.ufpe.br", history_tracking set to "true"
+    And this user has a history with a song with id "2"
+    When the function getUserHistory is called for id "1"
+    Then the history model returned must have user_id equal to "1" and song_id equal to "2"
