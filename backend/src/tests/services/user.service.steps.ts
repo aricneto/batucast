@@ -176,7 +176,6 @@ defineFeature(feature, (test) => {
     
         when(/^the function getUser is called for id "(.*)"$/, async (userId) => {
             user = await userService.getUser(userId);
-            console.log(user);
         });
     
         then(/^the user returned must have id "(.*)", name "(.*)", email "(.*)" and history_tracking set to "(.*)"$/, async (expectedId, expectedName, expectedEmail, expectedHistoryTracking) => {
