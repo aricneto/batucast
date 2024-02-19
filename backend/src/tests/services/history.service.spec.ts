@@ -170,27 +170,24 @@ describe('HistoryService', () => {
   });
 
   it('should return user histories', async () => {
-    // Arrange
+
     const id = '456';
     const mockHistories: HistoryEntity[] = [
       { id: '1', user_id: '456', song_id: '789' },
       { id: '2', user_id: '456', song_id: '890' },
-      { id: '3', user_id: '789', song_id: '123' }, // This one should be filtered out
+      { id: '3', user_id: '789', song_id: '123' }, 
     ];
     const expectedHistories: HistoryModel[] = [
       { id: '1', user_id: '456', song_id: '789' },
       { id: '2', user_id: '456', song_id: '890' },
     ];
 
-    // Mock the getHistories method to return the mockHistories array
     jest.spyOn(mockHistoryRepository, 'getHistories').mockResolvedValue(mockHistories);
 
-    // Act
     const result = await service.getUserHistory(id);
 
-    // Assert
     expect(result).toEqual(expectedHistories);
     expect(mockHistoryRepository.getHistories).toHaveBeenCalledTimes(1);
   });
-  
+
 });
