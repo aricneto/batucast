@@ -16,12 +16,12 @@ And o JSON da resposta deve conter os ids e nomes das 5 músicas mais tocadas
 
 Scenario: Deletar uma música que estava no top songs
 Given o top songs está preenchido com 10 músicas
-		And entre elas está a música chamada “X” na “1º” posição
-		And a 11° música mais escutada se chama “Y”
-		When “X” é deletada do banco de dados através de uma requisição “DELETE”
-		Then o status da resposta do “DELETE” é “204”
-		And a lista do top 10 sofre uma alteração onde todas as músicas que estavam
-	abaixo da primeira opção sobem de ranking
+And entre elas está a música chamada “X” na “1º” posição
+And a 11° música mais escutada se chama “Y”
+When “X” é deletada do banco de dados através de uma requisição “DELETE”
+Then o status da resposta do “DELETE” é “204”
+And a lista do top 10 sofre uma alteração onde todas as músicas que estavam
+abaixo da primeira opção sobem de ranking
 And a música Y entra para a 10° posição 
 
 Scenario: Obter top 5 músicas quando há menos cadastradas

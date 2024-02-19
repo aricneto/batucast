@@ -108,16 +108,7 @@ describe('PlaylistService', () => {
         expect(mockPlaylistRepository.createPlaylist).toHaveBeenCalledWith(playlistData);
       });
     
-      it('should delete a playlist by id', async () => {
-        const playlistId = '1';
-        const userId = 'user1';
-        jest.spyOn(mockPlaylistRepository, 'getPlaylist').mockResolvedValue(mockPlaylistEntity);
-  
-        await playlistService.deletePlaylist(playlistId, userId);
-  
-        expect(mockPlaylistRepository.getPlaylist).toHaveBeenCalledWith(playlistId);
-        expect(mockPlaylistRepository.deletePlaylist).toHaveBeenCalledWith(playlistId);
-      });
+      
 
       it('should throw HttpNotFoundError if playlist is not found', async () => {
         const playlistId = '1';
@@ -141,10 +132,12 @@ describe('PlaylistService', () => {
             followers: ['follower1', 'follower2'],
             contributors: ['contributor1', 'contributor2']
         };
+        jest.spyOn(mockPlaylistRepository, 'createPlaylist').mockResolvedValue(mockPlaylistEntity);
+        const createdPlaylist = await playlistService.createPlaylist(mockPlaylistEntity);
+        console.log(createdPlaylist);
         jest.spyOn(mockPlaylistRepository, 'updatePlaylist').mockResolvedValue(updatedData);
   
         const updatedPlaylist = await playlistService.updatePlaylist(playlistId, updatedData, userId);
-       // console.log(updatedPlaylist);
   
         expect(updatedPlaylist).toEqual(updatedData);
         expect(mockPlaylistRepository.updatePlaylist).toHaveBeenCalledWith(playlistId, updatedData);
@@ -180,5 +173,16 @@ describe('PlaylistService', () => {
         expect(mockPlaylistRepository.getPlaylist).toHaveBeenCalledWith(playlistId);
         expect(mockSongRepository.getSong).toHaveBeenCalledWith(songIdToRemove);
         expect(mockPlaylistRepository.updatePlaylist).toHaveBeenCalledWith(playlistId, mockPlaylistEntity);
+      });
+
+      it('should delete a playlist by id', async () => {
+        const playlistId = '1';
+        const userId = 'user1';
+        jest.spyOn(mockPlaylistRepository, 'getPlaylist').mockResolvedValue(mockPlaylistEntity);
+  
+        await playlistService.deletePlaylist(playlistId, userId);
+  
+        expect(mockPlaylistRepository.getPlaylist).toHaveBeenCalledWith(playlistId);
+        expect(mockPlaylistRepository.deletePlaylist).toHaveBeenCalledWith(playlistId);
       });
 });
