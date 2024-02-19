@@ -64,7 +64,7 @@ Scenario: Personalized Recommendations
     When the function getUserRecommendations is called for user id "1"
     Then the recommendation to be returned must be the song with id "1" and genre "MPB"
 
-Scenario: User Page - getHistory function
+Scenario: User Page - getUserHistory function
     Given the system has a user with id "1", name "otaviohbf", email "ohbf@cin.ufpe.br", history_tracking set to "true"
     And this user has a history with a song with id "2"
     When the function getUserHistory is called for id "1"

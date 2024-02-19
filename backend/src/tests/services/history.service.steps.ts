@@ -433,10 +433,7 @@ defineFeature(feature, (test) => {
   });
   
 
-
-
-
-  test('User Page - getHistory function', ({ given, and, when, then }) => {
+  test('User Page - getUserHistory function', ({ given, and, when, then }) => {
     let history: HistoryModel[] | null;
 
     given(/^the system has a user with id "(.*)", name "(.*)", email "(.*)", history_tracking set to "(.*)"$/, async (userId, userName, userEmail, historyTracking) => {
