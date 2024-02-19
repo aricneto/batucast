@@ -102,4 +102,11 @@ it('should create a playlist', async () => {
     
       expect(response.status).toBe(200);
     });
+
+    it('should return an empty list as a result of the search', async () => {
+      
+      const response = await request.get('/api/playlists/search/?keyword=after');
+      expect(response.status).toBe(200);
+      expect(response.body.data).toEqual([]);
+    });
 });
