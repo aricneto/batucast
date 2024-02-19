@@ -19,7 +19,7 @@ Scenario: Personalized Recommendations (not ok)
     And there is, in the database, one other song with id "1" and genre "MPB"
     Then the recommendation to be returned must be the song with id "1" and genre "MPB"
 
-Scenario: Searching for a song by a string that is contained in the title
+Scenario: Searching for a song by a string that is contained in the title (ok)
     Given there's a song with name "Watermelon", artist "Spongebob" in the database
 	When the searchSongs function is called with query word "water"
     Then the returned songs array must include a song with name "Watermelon" and artist "Spongebob"
@@ -34,7 +34,7 @@ Scenario: Searching for a private playlist
     When the searchPlaylists function is called with query word "Afternoon Sessions"
     Then the returned playlists array must not include a playlist with name "Afternoon Sessions" and id "ce6f5c66-1967-4b21-9929-51ca7d652151"
 
-Scenario: Search for a song with a genre filter
+Scenario: Search for a song with a genre filter (ok)
     Given there's a song with name "Watermelon", artist "Spongebob" and genre "MPB" in the database
 	When the searchSongs function is called with query word "water" and filter "mpb"
     Then the returned songs array must include a song with name "Watermelon", artist "Spongebob" and genre "MPB"

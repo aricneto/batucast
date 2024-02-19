@@ -28,7 +28,7 @@ class SongRepository extends BaseRepository<SongEntity> {
   public async deleteSong(id: string): Promise<void> {
     await this.delete((item) => item.id !== id);
   }
-  // Implementing search function
+
   public async searchSongs(
     keyword: string,
     filter?: string
