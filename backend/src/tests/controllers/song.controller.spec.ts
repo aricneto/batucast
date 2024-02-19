@@ -31,14 +31,14 @@ describe('SongController', () => {
 
   it('should return a song by the keyword query', async () => {
 
-    const response = await request.get(`/api/songs/search/?keyword=water`);
+    const response = await request.get(`/api/feed/search/songs/?keyword=water`);
     expect(response.status).toBe(200);
     expect(response.body.data).toContainEqual(mockSongEntity);
   });
 
   it('should return a song by the keyword query and filter query', async () => {
 
-    const response = await request.get(`/api/songs/search/?keyword=water&filter=mPb`);
+    const response = await request.get(`/api/feed/search/songs/?keyword=water&filter=mPb`);
     expect(response.status).toBe(200);
     expect(response.body.data).toContainEqual(mockSongEntity);
   });

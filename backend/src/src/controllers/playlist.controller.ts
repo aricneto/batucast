@@ -21,7 +21,7 @@ class PlaylistController {
 
   private initRoutes() {
     this.router.get(
-      `${this.prefix}${this.search}`,
+      `/feed${this.search}${this.prefix}`,
       (req: Request, res: Response) => this.searchPlaylists(req, res)
     );
 

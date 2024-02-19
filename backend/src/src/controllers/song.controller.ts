@@ -5,7 +5,7 @@ import SongEntity from "../entities/song.entity";
 
 class SongController {
   private prefix: string = "/songs";
-  private sufix: string = "/search";
+  private search: string = "/search";
   public router: Router;
   private songService: SongService;
 
@@ -17,7 +17,7 @@ class SongController {
 
   private initRoutes() {
     this.router.get(
-      `${this.prefix}${this.sufix}`,
+      `/feed${this.search}${this.prefix}`,
       (req: Request, res: Response) => this.searchSongs(req, res)
     );
 

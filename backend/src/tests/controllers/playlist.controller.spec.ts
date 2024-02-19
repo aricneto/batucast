@@ -105,7 +105,7 @@ it('should create a playlist', async () => {
 
     it('should return an empty list as a result of the search', async () => {
       
-      const response = await request.get('/api/playlists/search/?keyword=after');
+      const response = await request.get('/api/feed/search/playlists/?keyword=after');
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual([]);
     });
