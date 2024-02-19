@@ -13,6 +13,8 @@ export default class SongModel extends BaseModel {
     this.duration = data.duration;
     this.artist = data.artist;
     this.genre = data.genre;
-    this.times_ever_played = data.times_ever_played;
+    this.times_ever_played = data.times_ever_played
+      ? data.times_ever_played
+      : 0;
   }
 }

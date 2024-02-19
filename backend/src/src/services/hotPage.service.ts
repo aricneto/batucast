@@ -27,9 +27,16 @@ class HotPageService {
     }
     const slicedArray = sortedArray.slice(0, 5);
 
-    if (!slicedArray) {
+    if (genre && slicedArray.length === 0) {
       throw new HttpNotFoundError({
-        msg: "Song list not found",
+        msg: "Genre not found",
+        msgCode: HotPageServiceMessageCode.hotPage_not_found,
+      });
+    }
+
+    if (sortedArray.length === 0) {
+      throw new HttpNotFoundError({
+        msg: "There are no songs in the database.",
         msgCode: HotPageServiceMessageCode.hotPage_not_found,
       });
     }

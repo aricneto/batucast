@@ -83,7 +83,7 @@ class PlaylistRepository extends BaseRepository<PlaylistEntity> {
       const playlist = await this.getPlaylist(playlistId);
       if (playlist) {
         // Checa se o usuário já é um contribuidor
-        if (playlist.followers.indexOf(contributorId) > -1) {
+        if (playlist.contributors.indexOf(contributorId) > -1) {
           throw new Error("User is already a contributor to this playlist");
         }
         playlist.contributors.push(contributorId);
