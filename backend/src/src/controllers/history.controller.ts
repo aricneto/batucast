@@ -54,7 +54,7 @@ class HistoryController {
     );
 
     this.router.get(
-      `${this.prefix}/:id${this.recommendations}`,
+      `/feed${this.prefix}/:id${this.recommendations}`,
       (req: Request, res: Response) => this.getUserRecommendations(req, res)
     );
 
