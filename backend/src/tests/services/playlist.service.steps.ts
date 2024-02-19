@@ -393,4 +393,59 @@ defineFeature(feature, (test) => {
             expect(response.songs).toContain(songId2);
         });
     });
+
+    test("Searching for a public playlist", ({ given, when, then }) => {
+        let playlists: PlaylistEntity[];
+      
+        given(/^there's a playlist named "(.*)" and id "(.*)", that has the private atribute set to "(.*)" in the database$/, async (playlistName, playlistId, isPrivate) => {
+          const mockPlaylistEntity = new PlaylistEntity({
+            id: playlistId,
+            name: playlistName,
+            private: isPrivate === "true" ? true : false,
+            songs: [], 
+            createdBy: "3",
+            followers: [], 
+            contributors: [], 
+          });
+          jest.spyOn(mockPlaylistRepository, "searchPlaylists").mockResolvedValue([mockPlaylistEntity]);
+        });
+      
+        when(/^the searchPlaylists function is called with query word "(.*)"$/, async (queryWord) => {
+          playlists = await playlistService.searchPlaylists(queryWord);
+        });
+      
+        then(/^the returned playlists array must include a playlist with name "(.*)" and id "(.*)"$/, async (expectedName, expectedId) => {
+          const foundPlaylist = playlists.find(playlist => playlist.name === expectedName && playlist.id === expectedId);
+          expect(foundPlaylist).toBeDefined();
+        });
+      });
+
+    test("Searching for a private playlist", ({ given, when, then }) => {
+        let playlists: PlaylistEntity[];
+      
+        given(/^there's a playlist named "(.*)" and id "(.*)", that has the private atribute set to "(.*)" in the database$/, async (playlistName, playlistId, isPrivate) => {
+            const mockPlaylistEntity = new PlaylistEntity({
+                id: playlistId,
+                name: playlistName,
+                private: isPrivate === "true" ? true : false,
+                songs: [], 
+                createdBy: "3",
+                followers: [], 
+                contributors: [], 
+            });
+            jest.spyOn(mockPlaylistRepository, "searchPlaylists").mockResolvedValue([]);
+        });
+      
+        when(/^the searchPlaylists function is called with query word "(.*)"$/, async (queryWord) => {
+            playlists = await playlistService.searchPlaylists(queryWord);
+            console.log(playlists)
+        });
+      
+        then(/^the returned playlists array must not include a playlist with name "(.*)" and id "(.*)"$/, async (expectedName, expectedId) => {
+            const foundPlaylist = playlists.find(playlist => playlist.name === expectedName && playlist.id === expectedId);
+            expect(foundPlaylist).toBeUndefined();
+        });
+    });
+    
+      
 });

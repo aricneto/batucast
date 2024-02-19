@@ -37,3 +37,13 @@ Feature: Playlist Service
         And the function getPlaylist is called with the playlist id "1"
         Then the playlist returned must not have the song with id "5"
         And the playlist must have songs with ids "4" and "6"
+
+    Scenario: Searching for a public playlist
+        Given there's a playlist named "Road Trip Playlist" and id "2", that has the private atribute set to "false" in the database
+        When the searchPlaylists function is called with query word "trip"
+        Then the returned playlists array must include a playlist with name "Road Trip Playlist" and id "2"
+
+    Scenario: Searching for a private playlist
+        Given there's a playlist named "Afternoon Sessions" and id "ce6f5c66-1967-4b21-9929-51ca7d652151", that has the private atribute set to "true" in the database
+        When the searchPlaylists function is called with query word "Afternoon Sessions"
+        Then the returned playlists array must not include a playlist with name "Afternoon Sessions" and id "ce6f5c66-1967-4b21-9929-51ca7d652151"

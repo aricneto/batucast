@@ -24,12 +24,12 @@ Scenario: Searching for a song by a string that is contained in the title (ok)
 	When the searchSongs function is called with query word "water"
     Then the returned songs array must include a song with name "Watermelon" and artist "Spongebob"
 
-Scenario: Searching for a public playlist
+Scenario: Searching for a public playlist (ok)
     Given there's a playlist named "Road Trip Playlist" and id "2", that has the private atribute set to "false" in the database
     When the searchPlaylists function is called with query word "trip"
     Then the returned playlists array must include a playlist with name "Road Trip Playlist" and id "2"
 
-Scenario: Searching for a private playlist
+Scenario: Searching for a private playlist (ok)
     Given there's a playlist named "Afternoon Sessions" and id "ce6f5c66-1967-4b21-9929-51ca7d652151", that has the private atribute set to "true" in the database
     When the searchPlaylists function is called with query word "Afternoon Sessions"
     Then the returned playlists array must not include a playlist with name "Afternoon Sessions" and id "ce6f5c66-1967-4b21-9929-51ca7d652151"
